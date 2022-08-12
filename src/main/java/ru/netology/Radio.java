@@ -72,7 +72,7 @@ public class Radio {
     } else {
       setMinStation();
     }
-    setCurrentVolume(currentStation);
+    setCurrentStation(currentStation);
   }
 
   public void prevStation() { //Переключаем на предыдущую станцию
@@ -81,6 +81,6 @@ public class Radio {
     } else {
       setMaxStation();
     }
-    setCurrentVolume(currentStation);
+    setCurrentStation(currentStation);
   }
 }
