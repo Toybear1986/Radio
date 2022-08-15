@@ -6,156 +6,43 @@ import org.junit.jupiter.api.Test;
 public class RadioTest {
 
   @Test
-  public void shouldIncreaseVolume() {
-    Radio volume = new Radio();
-    volume.increaseVolume();
+  public void RadioShouldWorkProperly() {
+    Radio all = new Radio(50, 5, 10);
+    all.setQuantityOfStations(10); // Проверим корректность установки максимума при установке количества программ
+    Assertions.assertEquals(all.getQuantityOfStations() - 1, all.getMaxStation());
 
-    int expected = 6;
-    int actual = volume.getCurrentVolume();
+    all.nextStation(); // Проверим корректность переключения на следующую станцию
+    Assertions.assertEquals(6, all.getCurrentStation());
 
-    Assertions.assertEquals(expected, actual);
-  }
+    all.prevStation(); // Проверим корректность переключения на предыдущую
+    Assertions.assertEquals(5, all.getCurrentStation());
 
-  @Test
-  public void shouldDecreaseVolume() {
-    Radio volume = new Radio();
-    volume.decreaseVolume();
+    all.setCurrentStation(-1); // Попробуем поставить станцию ниже минимума
+    Assertions.assertEquals(5, all.getCurrentStation());
 
-    int expected = 4;
-    int actual = volume.getCurrentVolume();
+    all.setCurrentStation(0); //Проверим корректность переключения на предыдущую, если стоит минимальная
+    all.prevStation();
+    Assertions.assertEquals(9, all.getCurrentStation());
 
-    Assertions.assertEquals(expected, actual);
-  }
+    all.setCurrentStation(all.getMaxStation()); //Проверим корректность переключения на следующую, если стоит максимальная
+    all.nextStation();
+    Assertions.assertEquals(0, all.getCurrentStation());
 
-  @Test
-  public void shouldNotDecreaseVolumeIfZero() {
-    Radio volume = new Radio();
-    volume.setMute();
-    volume.decreaseVolume();
+    all.setCurrentStation(10); // Попробуем поставить станцию выше максимума
+    Assertions.assertEquals(0, all.getCurrentStation());
 
-    int expected = 0;
-    int actual = volume.getCurrentVolume();
+    all.increaseVolume(); // Попробуем увеличить громкость
+    Assertions.assertEquals(51, all.getCurrentVolume());
 
-    Assertions.assertEquals(expected, actual);
-  }
+    all.decreaseVolume(); // Попробуем уменшить громкость
+    Assertions.assertEquals(50, all.getCurrentVolume());
 
-  @Test
-  public void shouldNotIncreaseVolumeIfMax() {
-    Radio volume = new Radio();
-    volume.setMaxVolume();
-    volume.increaseVolume();
+    all.setCurrentVolume(100); //Пробуем поднять громкость выше максимума
+    all.increaseVolume();
+    Assertions.assertEquals(100, all.getCurrentVolume());
 
-    int expected = 100;
-    int actual = volume.getCurrentVolume();
-
-    Assertions.assertEquals(expected, actual);
-  }
-
-  @Test
-  public void shouldNotSetVolumeAboveMax() {
-    Radio volume = new Radio();
-    volume.setCurrentVolume(101);
-
-    int expected = 5;
-    int actual = volume.getCurrentVolume();
-
-    Assertions.assertEquals(expected, actual);
-  }
-
-  @Test
-  public void shouldNotSetVolumeBelowMin() {
-    Radio volume = new Radio();
-    volume.setCurrentVolume(-1);
-
-    int expected = 5;
-    int actual = volume.getCurrentVolume();
-
-    Assertions.assertEquals(expected, actual);
-  }
-
-  @Test
-  public void shouldSwitchToNextStation() {
-    Radio station = new Radio();
-    station.nextStation();
-
-    int expected = 3;
-    int actual = station.getCurrentStation();
-
-    Assertions.assertEquals(expected, actual);
-  }
-
-  @Test
-  public void shouldSwitchToPrevStation() {
-    Radio station = new Radio();
-    station.prevStation();
-
-    int expected = 1;
-    int actual = station.getCurrentStation();
-
-    Assertions.assertEquals(expected, actual);
-  }
-
-  @Test
-  public void shouldSwitchToMaxIfMin() {
-    Radio station = new Radio();
-    station.setMinStation();
-    station.prevStation();
-
-    int expected = 9;
-    int actual = station.getCurrentStation();
-
-    Assertions.assertEquals(expected, actual);
-  }
-
-  @Test
-  public void shouldSwitchToMinIfMax() {
-    Radio station = new Radio();
-    station.setMaxStation();
-    station.nextStation();
-
-    int expected = 0;
-    int actual = station.getCurrentStation();
-
-    Assertions.assertEquals(expected, actual);
-  }
-
-  @Test
-  public void shouldNotSwitchIfNumberAboveMax() {
-    Radio station = new Radio();
-    station.setCurrentStation(10);
-
-    int expected = 2;
-    int actual = station.getCurrentStation();
-
-    Assertions.assertEquals(expected, actual);
-  }
-
-  @Test
-  public void shouldNotSwitchIfNumberBelowMin() {
-    Radio station = new Radio();
-    station.setCurrentStation(-1);
-
-    int expected = 2;
-    int actual = station.getCurrentStation();
-
-    Assertions.assertEquals(expected, actual);
-  }
-
-  @Test
-  public void shouldSetCorrectStation() {
-    Radio station = new Radio();
-    station.setCurrentStation(5);
-
-    int expected = 5;
-    int actual = station.getCurrentStation();
-
-    Assertions.assertEquals(expected, actual);
-  }
-
-  @Test
-  public void shouldCorrectMaxStationForQuantity() {
-    Radio station = new Radio(10);
-
-    Assertions.assertEquals(9, station.getMaxStation());
+    all.setCurrentVolume(0); //Пробуем сделать громкость нише минимума
+    all.decreaseVolume();
+    Assertions.assertEquals(0, all.getCurrentVolume());
   }
 }
